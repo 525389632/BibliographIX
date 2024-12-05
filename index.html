@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>参考文献格式生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>参考文献格式生成器</h1>
+        
+        <div class="content-wrapper">
+            <!-- 左侧输入区域 -->
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="referenceType">文献类型：</label>
+                    <select id="referenceType">
+                        <option value="期刊">期刊[J]</option>
+                        <option value="专著">专著[M]</option>
+                        <option value="论文集">论文集[C]</option>
+                        <option value="学位论文">学位论文[D]</option>
+                        <option value="报告">报告[R]</option>
+                        <option value="报纸">报纸[N]</option>
+                        <option value="标准">标准[S]</option>
+                        <option value="专利">专利[P]</option>
+                        <option value="电子文献">电子文献[EB]</option>
+                    </select>
+                </div>
+
+                <div id="journalFields" class="reference-fields">
+                    <div class="form-group">
+                        <label for="authors">作者：</label>
+                        <input type="text" id="authors" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">题目：</label>
+                        <input type="text" id="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="journal">期刊名：</label>
+                        <input type="text" id="journal">
+                    </div>
+                    <div class="form-group">
+                        <label for="year">出版年份：</label>
+                        <input type="text" id="year">
+                    </div>
+                    <div class="form-group">
+                        <label for="volume">卷号：</label>
+                        <input type="text" id="volume">
+                    </div>
+                    <div class="form-group">
+                        <label for="issue">期数：</label>
+                        <input type="text" id="issue">
+                    </div>
+                    <div class="form-group">
+                        <label for="pages">起止页码：</label>
+                        <input type="text" id="pages">
+                    </div>
+                </div>
+
+                <div id="bookFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="bookAuthors">主要责任者：</label>
+                        <input type="text" id="bookAuthors" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookTitle">文献题名：</label>
+                        <input type="text" id="bookTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="publisher">出版者：</label>
+                        <input type="text" id="publisher">
+                    </div>
+                    <div class="form-group">
+                        <label for="publishPlace">出版地：</label>
+                        <input type="text" id="publishPlace">
+                    </div>
+                    <div class="form-group">
+                        <label for="publishYear">出版年：</label>
+                        <input type="text" id="publishYear">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookPages">页码：</label>
+                        <input type="text" id="bookPages" placeholder="选填">
+                    </div>
+                </div>
+
+                <div id="thesisFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="thesisAuthor">作者：</label>
+                        <input type="text" id="thesisAuthor">
+                    </div>
+                    <div class="form-group">
+                        <label for="thesisTitle">论文题目：</label>
+                        <input type="text" id="thesisTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="university">学校：</label>
+                        <input type="text" id="university">
+                    </div>
+                    <div class="form-group">
+                        <label for="thesisYear">年份：</label>
+                        <input type="text" id="thesisYear">
+                    </div>
+                </div>
+
+                <div id="newspaperFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="newspaperAuthor">作者：</label>
+                        <input type="text" id="newspaperAuthor" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="newspaperTitle">文献题名：</label>
+                        <input type="text" id="newspaperTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="newspaperName">报纸名：</label>
+                        <input type="text" id="newspaperName">
+                    </div>
+                    <div class="form-group">
+                        <label for="publishDate">出版日期：</label>
+                        <input type="text" id="publishDate" placeholder="格式：YYYY-MM-DD">
+                    </div>
+                    <div class="form-group">
+                        <label for="newspaperPage">版次：</label>
+                        <input type="text" id="newspaperPage">
+                    </div>
+                </div>
+
+                <div id="reportFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="reportAuthor">作者：</label>
+                        <input type="text" id="reportAuthor" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="reportTitle">题目：</label>
+                        <input type="text" id="reportTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="reportPlace">报告地：</label>
+                        <input type="text" id="reportPlace">
+                    </div>
+                    <div class="form-group">
+                        <label for="institution">主办单位：</label>
+                        <input type="text" id="institution">
+                    </div>
+                    <div class="form-group">
+                        <label for="reportYear">报告年份：</label>
+                        <input type="text" id="reportYear">
+                    </div>
+                </div>
+
+                <div id="proceedingsFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="proceedingsAuthor">作者：</label>
+                        <input type="text" id="proceedingsAuthor" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsTitle">题目：</label>
+                        <input type="text" id="proceedingsTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="editor">主编：</label>
+                        <input type="text" id="editor">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsName">论文集名：</label>
+                        <input type="text" id="proceedingsName">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsPlace">出版地：</label>
+                        <input type="text" id="proceedingsPlace">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsPublisher">出版单位：</label>
+                        <input type="text" id="proceedingsPublisher">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsYear">出版年份：</label>
+                        <input type="text" id="proceedingsYear">
+                    </div>
+                    <div class="form-group">
+                        <label for="proceedingsPages">页码：</label>
+                        <input type="text" id="proceedingsPages">
+                    </div>
+                </div>
+
+                <div id="webFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="webAuthor">责任者：</label>
+                        <input type="text" id="webAuthor" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="webTitle">题目：</label>
+                        <input type="text" id="webTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="webYear">出版年：</label>
+                        <input type="text" id="webYear">
+                    </div>
+                    <div class="form-group">
+                        <label for="citationDate">引用日期：</label>
+                        <input type="text" id="citationDate" placeholder="格式：YYYY-MM-DD">
+                    </div>
+                    <div class="form-group">
+                        <label for="url">访问路径：</label>
+                        <input type="text" id="url">
+                    </div>
+                </div>
+
+                <div id="patentFields" class="reference-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="patentAuthor">专利申请者或所有者：</label>
+                        <input type="text" id="patentAuthor" placeholder="多个作者用分号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="patentTitle">专利题名：</label>
+                        <input type="text" id="patentTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="patentCountry">专利国别：</label>
+                        <input type="text" id="patentCountry" placeholder="例如：中国">
+                    </div>
+                    <div class="form-group">
+                        <label for="patentNumber">专利号：</label>
+                        <input type="text" id="patentNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="patentDate">公告日期或公开日期：</label>
+                        <input type="text" id="patentDate" placeholder="格式：YYYY-MM-DD">
+                    </div>
+                </div>
+
+                <button id="generate">生成引用格式</button>
+            </div>
+
+            <!-- 右侧输出区域 -->
+            <div class="output-section">
+                <div class="output-card">
+                    <h3>生成的参考文献格式</h3>
+                    <div id="result" class="result"></div>
+                    <button id="copy" class="copy-btn">复制到剪贴板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
