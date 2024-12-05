@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
         '报告': 'reportFields',
         '论文集': 'proceedingsFields',
         '电子文献': 'webFields',
-        '专利': 'patentFields'
+        '专利': 'patentFields',
+        '标准': 'standardFields'
     };
 
     // 切换显示不同的输入字段组
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case '专利':
                 reference = generatePatentReference();
+                break;
+            case '标准':
+                reference = generateStandardReference();
                 break;
             default:
                 reference = '暂不支持该类型';
@@ -103,10 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateThesisReference() {
         const author = document.getElementById('thesisAuthor').value;
         const title = document.getElementById('thesisTitle').value;
+        const place = document.getElementById('thesisPlace').value;
         const university = document.getElementById('university').value;
         const year = document.getElementById('thesisYear').value;
 
-        return `${author}. ${title}[D]. ${university}, ${year}.`;
+        return `${author}. ${title}[D]. ${place}: ${university}, ${year}.`;
     }
 
     function generateNewspaperReference() {
@@ -196,6 +201,34 @@ document.addEventListener('DOMContentLoaded', function() {
         return reference + '.';
     }
 
+    function generateStandardReference() {
+        const author = document.getElementById('standardAuthor').value;
+        const name = document.getElementById('standardName').value;
+        const number = document.getElementById('standardNumber').value;
+        const place = document.getElementById('standardPlace').value;
+        const publisher = document.getElementById('standardPublisher').value;
+        const year = document.getElementById('standardYear').value;
+        const pages = document.getElementById('standardPages').value;
+        const accessDate = document.getElementById('standardAccessDate').value;
+
+        let reference = `${author}. ${name}: ${number}[S`;
+        
+        if (accessDate) {
+            reference += '/OL';
+        }
+        reference += `]. ${place}: ${publisher}, ${year}`;
+        
+        if (pages) {
+            reference += `: ${pages}`;
+        }
+        
+        if (accessDate) {
+            reference += `[${accessDate}]`;
+        }
+        
+        return reference + '.';
+    }
+
     function formatAuthors(authors) {
         return authors
             .split(';')
@@ -241,4 +274,21 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('复制失败：', err);
         });
     }
+
+    const typeItems = document.querySelectorAll('.type-selector li');
+
+    typeItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // 移除其他项的active类
+            typeItems.forEach(i => i.classList.remove('active'));
+            // 添加当前项的active类
+            this.classList.add('active');
+            
+            // 更新select的值并触发change事件
+            const type = this.dataset.type;
+            const select = document.getElementById('referenceType');
+            select.value = type;
+            select.dispatchEvent(new Event('change'));
+        });
+    });
 }); 

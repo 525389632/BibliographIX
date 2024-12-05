@@ -5,11 +5,12 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
     background-color: #f5f5f5;
     min-height: 100vh;
     padding: 20px;
+    color: #1d1d1f;
 }
 
 .container {
@@ -17,59 +18,113 @@ body {
     margin: 0 auto;
 }
 
-h1 {
+header {
     text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 2em;
-    padding: 20px 0;
+    margin-bottom: 50px;
+    padding: 40px 0;
+}
+
+h1 {
+    font-size: 56px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #1d1d1f 0%, #434343 100%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 21px;
+    color: #86868b;
+    font-weight: 400;
 }
 
 .content-wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 200px 1fr 400px;
     gap: 30px;
-    min-height: calc(100vh - 150px);
+    min-height: calc(100vh - 200px);
 }
 
-/* 左侧输入区域样式 */
+/* 左侧文献类型选择器样式 */
+.type-selector {
+    padding: 20px 0;
+}
+
+.type-selector h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    color: #1d1d1f;
+}
+
+.type-selector ul {
+    list-style: none;
+}
+
+.type-selector li {
+    padding: 12px 20px;
+    margin: 4px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    color: #494949;
+}
+
+.type-selector li:hover {
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+}
+
+.type-selector li.active {
+    background-color: #1d1d1f;
+    color: white;
+}
+
+/* 中间输入区域样式 */
 .input-section {
-    flex: 1;
     background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #444;
+    color: #1d1d1f;
+    font-size: 14px;
 }
 
 input, select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.3s;
+    padding: 12px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
 }
 
 input:focus, select:focus {
     outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+    border-color: #0071e3;
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+    background-color: white;
 }
 
 /* 右侧输出区域样式 */
 .output-section {
-    width: 400px;
     position: sticky;
     top: 20px;
     align-self: flex-start;
@@ -77,27 +132,29 @@ input:focus, select:focus {
 
 .output-card {
     background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .output-card h3 {
-    color: #333;
+    color: #1d1d1f;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 1px solid #d2d2d7;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .result {
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    min-height: 100px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    min-height: 120px;
     margin-bottom: 20px;
     font-size: 14px;
     line-height: 1.6;
-    color: #333;
+    color: #1d1d1f;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
@@ -106,74 +163,81 @@ button {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 #generate {
-    background-color: #4CAF50;
+    background-color: #0071e3;
     color: white;
     margin-top: 30px;
 }
 
 #generate:hover {
-    background-color: #45a049;
+    background-color: #0077ed;
 }
 
 .copy-btn {
-    background-color: #6c757d;
-    color: white;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
 }
 
 .copy-btn:hover {
-    background-color: #5a6268;
+    background-color: #e8e8ed;
+}
+
+.copy-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
 }
 
 /* 响应式设计 */
 @media (max-width: 1200px) {
     .content-wrapper {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+    
+    .type-selector {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 100;
+        margin: -20px -20px 20px;
+        padding: 20px;
+        border-bottom: 1px solid #d2d2d7;
+    }
+    
+    .type-selector ul {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .type-selector li {
+        white-space: nowrap;
     }
     
     .output-section {
-        width: 100%;
         position: static;
     }
-    
-    .input-section {
-        max-width: 100%;
-    }
 }
 
-/* 美化滚动条 */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* 字段组的显示/隐藏动画 */
+/* 动画效果 */
 .reference-fields {
-    transition: opacity 0.3s, transform 0.3s;
+    transition: all 0.3s ease;
 }
 
 .reference-fields[style*="display: none"] {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(10px);
 }
 
 .reference-fields {
