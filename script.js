@@ -1,294 +1,324 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const referenceType = document.getElementById('referenceType');
+    // 获取所有必要的元素
+    const typeSelector = document.querySelector('.type-selector');
+    const referenceFields = document.querySelectorAll('.reference-fields');
     const generateBtn = document.getElementById('generate');
-    const copyBtn = document.getElementById('copy');
     const resultDiv = document.getElementById('result');
+    const copyBtn = document.getElementById('copy');
 
-    const fieldsMap = {
-        '期刊': 'journalFields',
-        '专著': 'bookFields',
-        '学位论文': 'thesisFields',
-        '报纸': 'newspaperFields',
-        '报告': 'reportFields',
-        '论文集': 'proceedingsFields',
-        '电子文献': 'webFields',
-        '专利': 'patentFields',
-        '标准': 'standardFields'
-    };
-
-    // 切换显示不同的输入字段组
-    referenceType.addEventListener('change', function() {
-        Object.values(fieldsMap).forEach(id => {
-            document.getElementById(id).style.display = 'none';
-        });
-        const selectedFields = fieldsMap[this.value];
-        if (selectedFields) {
-            document.getElementById(selectedFields).style.display = 'block';
+    // 文献类型切换处理
+    typeSelector.addEventListener('click', function(e) {
+        if (e.target.tagName === 'LI') {
+            typeSelector.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+            e.target.classList.add('active');
+            referenceFields.forEach(field => field.style.display = 'none');
+            
+            const type = e.target.getAttribute('data-type');
+            const targetFields = document.getElementById(type === '期刊' ? 'journalFields' :
+                                                      type === '专著' ? 'bookFields' :
+                                                      type === '论文集' ? 'proceedingsFields' :
+                                                      type === '学位论文' ? 'thesisFields' :
+                                                      type === '报告' ? 'reportFields' :
+                                                      type === '报纸' ? 'newspaperFields' :
+                                                      type === '标准' ? 'standardFields' :
+                                                      type === '专利' ? 'patentFields' : 'webFields');
+            targetFields.style.display = 'block';
         }
     });
 
-    generateBtn.addEventListener('click', generateReference);
-    copyBtn.addEventListener('click', copyToClipboard);
+    // 生成引用格式
+    generateBtn.addEventListener('click', function() {
+        const activeType = typeSelector.querySelector('.active').getAttribute('data-type');
+        let result = '';
 
-    function generateReference() {
-        const type = referenceType.value;
-        let reference = '';
-
-        switch(type) {
+        switch (activeType) {
             case '期刊':
-                reference = generateJournalReference();
+                result = generateJournalReference();
                 break;
             case '专著':
-                reference = generateBookReference();
-                break;
-            case '学位论文':
-                reference = generateThesisReference();
-                break;
-            case '报纸':
-                reference = generateNewspaperReference();
-                break;
-            case '报告':
-                reference = generateReportReference();
+                result = generateBookReference();
                 break;
             case '论文集':
-                reference = generateProceedingsReference();
+                result = generateProceedingsReference();
                 break;
-            case '电子文献':
-                reference = generateWebReference();
+            case '学位论文':
+                result = generateThesisReference();
                 break;
-            case '专利':
-                reference = generatePatentReference();
+            case '报告':
+                result = generateReportReference();
+                break;
+            case '报纸':
+                result = generateNewspaperReference();
                 break;
             case '标准':
-                reference = generateStandardReference();
+                result = generateStandardReference();
                 break;
-            default:
-                reference = '暂不支持该类型';
+            case '专利':
+                result = generatePatentReference();
+                break;
+            case '电子文献':
+                result = generateWebReference();
+                break;
         }
 
-        resultDiv.textContent = reference;
+        resultDiv.textContent = result;
+        
+        // 清空当前显示的输入框
+        clearCurrentInputs();
+    });
+
+    // 清空输入框函数
+    function clearCurrentInputs() {
+        // 获取当前活动的文献类型
+        const activeType = typeSelector.querySelector('.active').getAttribute('data-type');
+        
+        // 根据文献类型获取对应的字段组
+        const activeFields = document.getElementById(
+            activeType === '期刊' ? 'journalFields' :
+            activeType === '专著' ? 'bookFields' :
+            activeType === '论文集' ? 'proceedingsFields' :
+            activeType === '学位论文' ? 'thesisFields' :
+            activeType === '报告' ? 'reportFields' :
+            activeType === '报纸' ? 'newspaperFields' :
+            activeType === '标准' ? 'standardFields' :
+            activeType === '专利' ? 'patentFields' : 'webFields'
+        );
+
+        // 清空该字段组中的所有输入框
+        if (activeFields) {
+            const inputs = activeFields.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
     }
 
+    // 期刊引用格式生成函数
     function generateJournalReference() {
-        const authors = formatAuthors(document.getElementById('authors').value);
-        const title = document.getElementById('title').value;
-        const journal = document.getElementById('journal').value;
-        const year = document.getElementById('year').value;
-        const volume = document.getElementById('volume').value;
-        const issue = document.getElementById('issue').value;
-        const pages = document.getElementById('pages').value;
+        const authors = formatAuthors(document.getElementById('authors').value.trim());
+        const title = document.getElementById('title').value.trim();
+        const journal = document.getElementById('journal').value.trim();
+        const year = document.getElementById('year').value.trim();
+        const volume = document.getElementById('volume').value.trim();
+        const issue = document.getElementById('issue').value.trim();
+        const pages = document.getElementById('pages').value.trim();
 
         let reference = `${authors}. ${title}[J]. ${journal}`;
         
-        if (year) reference += `, ${year}`;
-        if (volume) reference += `, ${volume}`;
-        if (issue) reference += `(${issue})`;
-        if (pages) reference += `: ${pages}`;
-        
-        return reference + '.';
+        if (year) {
+            reference += `, ${year}`;
+        }
+        if (volume) {
+            reference += `, ${volume}`;
+            if (issue) {
+                reference += `(${issue})`;
+            }
+        }
+        if (pages) {
+            reference += `: ${pages}`;
+        }
+        reference += '.';
+
+        return reference;
     }
 
+    // 专著引用格式生成函数
     function generateBookReference() {
-        const authors = formatAuthors(document.getElementById('bookAuthors').value);
-        const title = document.getElementById('bookTitle').value;
-        const publisher = document.getElementById('publisher').value;
-        const place = document.getElementById('publishPlace').value;
-        const year = document.getElementById('publishYear').value;
-        const pages = document.getElementById('bookPages').value;
+        const authors = formatAuthors(document.getElementById('bookAuthors').value.trim());
+        const title = document.getElementById('bookTitle').value.trim();
+        const publisher = document.getElementById('publisher').value.trim();
+        const place = document.getElementById('publishPlace').value.trim();
+        const year = document.getElementById('publishYear').value.trim();
+        const pages = document.getElementById('bookPages').value.trim();
 
-        let reference = `${authors}. ${title}[M]. ${place}: ${publisher}`;
-        
-        if (year) reference += `, ${year}`;
-        if (pages) reference += `. ${pages}`;
-        
-        return reference + '.';
+        let reference = `${authors}. ${title}[M]. ${place}: ${publisher}, ${year}`;
+        if (pages) {
+            reference += `: ${pages}`;
+        }
+        reference += '.';
+
+        return reference;
     }
 
+    // 论文集引用格式生成函数
+    function generateProceedingsReference() {
+        const authors = formatAuthors(document.getElementById('proceedingsAuthor').value.trim());
+        const procName = document.getElementById('proceedingsName').value.trim();
+        const place = document.getElementById('proceedingsPlace').value.trim();
+        const publisher = document.getElementById('proceedingsPublisher').value.trim();
+        const year = document.getElementById('proceedingsYear').value.trim();
+
+        let reference = `${authors}. ${procName}[C]. ${place}: ${publisher}, ${year}.`;
+        
+        return reference;
+    }
+
+    // 学位论文引用格式生成函数
     function generateThesisReference() {
-        const author = document.getElementById('thesisAuthor').value;
-        const title = document.getElementById('thesisTitle').value;
-        const place = document.getElementById('thesisPlace').value;
-        const university = document.getElementById('university').value;
-        const year = document.getElementById('thesisYear').value;
+        const author = formatAuthors(document.getElementById('thesisAuthor').value.trim());
+        const title = document.getElementById('thesisTitle').value.trim();
+        const place = document.getElementById('thesisPlace').value.trim();
+        const university = document.getElementById('university').value.trim();
+        const year = document.getElementById('thesisYear').value.trim();
 
         return `${author}. ${title}[D]. ${place}: ${university}, ${year}.`;
     }
 
-    function generateNewspaperReference() {
-        const author = formatAuthors(document.getElementById('newspaperAuthor').value);
-        const title = document.getElementById('newspaperTitle').value;
-        const newspaper = document.getElementById('newspaperName').value;
-        const date = document.getElementById('publishDate').value;
-        const page = document.getElementById('newspaperPage').value;
-
-        let reference = `${author}. ${title}[N]. ${newspaper}`;
-        if (date) {
-            const formattedDate = date.replace(/-/g, '-');
-            reference += `, ${formattedDate}`;
-        }
-        if (page) reference += `(${page})`;
-        
-        return reference + '.';
-    }
-
+    // 报告引用格式生成函数
     function generateReportReference() {
-        const author = formatAuthors(document.getElementById('reportAuthor').value);
-        const title = document.getElementById('reportTitle').value;
-        const place = document.getElementById('reportPlace').value;
-        const institution = document.getElementById('institution').value;
-        const year = document.getElementById('reportYear').value;
+        const author = formatAuthors(document.getElementById('reportAuthor').value.trim());
+        const title = document.getElementById('reportTitle').value.trim();
+        const place = document.getElementById('reportPlace').value.trim();
+        const institution = document.getElementById('institution').value.trim();
+        const year = document.getElementById('reportYear').value.trim();
 
         return `${author}. ${title}[R]. ${place}: ${institution}, ${year}.`;
     }
 
-    function generateProceedingsReference() {
-        const author = formatAuthors(document.getElementById('proceedingsAuthor').value);
-        const title = document.getElementById('proceedingsTitle').value;
-        const editor = document.getElementById('editor').value;
-        const proceedingsName = document.getElementById('proceedingsName').value;
-        const place = document.getElementById('proceedingsPlace').value;
-        const publisher = document.getElementById('proceedingsPublisher').value;
-        const year = document.getElementById('proceedingsYear').value;
-        const pages = document.getElementById('proceedingsPages').value;
+    // 报纸引用格式生成函数
+    function generateNewspaperReference() {
+        const author = formatAuthors(document.getElementById('newspaperAuthor').value.trim());
+        const title = document.getElementById('newspaperTitle').value.trim();
+        const newspaper = document.getElementById('newspaperName').value.trim();
+        const date = document.getElementById('publishDate').value.trim();
+        const page = document.getElementById('newspaperPage').value.trim();
 
-        let reference = `${author}. ${title}[A]`;
-        if (editor) reference += `. ${editor}`;
-        reference += `. ${proceedingsName}[C]. ${place}: ${publisher}, ${year}`;
-        if (pages) reference += `. ${pages}`;
-        
-        return reference + '.';
+        return `${author}. ${title}[N]. ${newspaper}, ${date}(${page}).`;
     }
 
-    function generateWebReference() {
-        const author = formatAuthors(document.getElementById('webAuthor').value);
-        const title = document.getElementById('webTitle').value;
-        const year = document.getElementById('webYear').value;
-        const citationDate = document.getElementById('citationDate').value;
-        const url = document.getElementById('url').value;
-
-        let reference = `${author}. ${title}[EB/OL]`;
-        
-        if (year) {
-            reference += `. (${year})`;
-        }
-        
-        if (citationDate) {
-            const formattedDate = citationDate.replace(/-/g, '-');
-            reference += ` [${formattedDate}]`;
-        }
-        
-        if (url) {
-            reference += `. ${url}`;
-        }
-        
-        return reference + '.';
-    }
-
-    function generatePatentReference() {
-        const author = formatAuthors(document.getElementById('patentAuthor').value);
-        const title = document.getElementById('patentTitle').value;
-        const country = document.getElementById('patentCountry').value;
-        const number = document.getElementById('patentNumber').value;
-        const date = document.getElementById('patentDate').value;
-
-        let reference = `${author}. ${title}: ${country}, ${number}[P]`;
-        
-        if (date) {
-            const formattedDate = date.replace(/-/g, '-');
-            reference += `. ${formattedDate}`;
-        }
-        
-        return reference + '.';
-    }
-
+    // 标准引用格式生成函数
     function generateStandardReference() {
-        const author = document.getElementById('standardAuthor').value;
-        const name = document.getElementById('standardName').value;
-        const number = document.getElementById('standardNumber').value;
-        const place = document.getElementById('standardPlace').value;
-        const publisher = document.getElementById('standardPublisher').value;
-        const year = document.getElementById('standardYear').value;
-        const pages = document.getElementById('standardPages').value;
-        const accessDate = document.getElementById('standardAccessDate').value;
+        const author = formatAuthors(document.getElementById('standardAuthor').value.trim());
+        const name = document.getElementById('standardName').value.trim();
+        const number = document.getElementById('standardNumber').value.trim();
+        const place = document.getElementById('standardPlace').value.trim();
+        const publisher = document.getElementById('standardPublisher').value.trim();
+        const year = document.getElementById('standardYear').value.trim();
+        const pages = document.getElementById('standardPages').value.trim();
+        const accessDate = document.getElementById('standardAccessDate').value.trim();
 
         let reference = `${author}. ${name}: ${number}[S`;
         
+        // 如果有访问日期，添加/OL标识
         if (accessDate) {
             reference += '/OL';
         }
+        
         reference += `]. ${place}: ${publisher}, ${year}`;
         
+        // 添加页码
         if (pages) {
             reference += `: ${pages}`;
         }
         
+        // 添加访问日期（如果有）
         if (accessDate) {
             reference += `[${accessDate}]`;
         }
         
-        return reference + '.';
+        reference += '.';
+        
+        return reference;
     }
 
+    // 专利引用格式生成函数
+    function generatePatentReference() {
+        const author = formatAuthors(document.getElementById('patentAuthor').value.trim());
+        const title = document.getElementById('patentTitle').value.trim();
+        const number = document.getElementById('patentNumber').value.trim();
+        const date = document.getElementById('patentDate').value.trim();
+
+        return `${author}. ${title}: ${number}[P]. ${date}.`;
+    }
+
+    // 电子文献引用格式生成函数
+    function generateWebReference() {
+        const author = formatAuthors(document.getElementById('webAuthor').value.trim());
+        const title = document.getElementById('webTitle').value.trim();
+        const year = document.getElementById('webYear').value.trim();
+        const citationDate = document.getElementById('citationDate').value.trim();
+        const url = document.getElementById('url').value.trim();
+
+        let reference = `${author}. ${title}[EB/OL]`;
+        
+        // 添加出版年份（如果有）
+        if (year) {
+            reference += `. (${year})`;
+        }
+        
+        // 添加引用日期
+        if (citationDate) {
+            reference += `[${citationDate}]`;
+        }
+        
+        // 添加URL
+        if (url) {
+            reference += `. ${url}`;
+        }
+        
+        reference += '.';
+
+        return reference;
+    }
+
+    // 复制到剪贴板功能
+    copyBtn.addEventListener('click', function() {
+        const result = resultDiv.textContent;
+        if (result) {
+            navigator.clipboard.writeText(result).then(() => {
+                const span = copyBtn.querySelector('span');
+                const originalText = span.textContent;
+                span.textContent = '已复制';
+                setTimeout(() => {
+                    span.textContent = originalText;
+                }, 2000);
+            });
+        }
+    });
+
+    // 英文名字格式化函数
+    function formatAuthorName(author) {
+        // 如果包含中文字符，直接返回
+        if (/[\u4e00-\u9fa5]/.test(author)) {
+            return author;
+        }
+
+        // 去除多余的空格
+        author = author.trim();
+
+        // 处理"姓,名"格式 (Einstein, Albert)
+        if (author.includes(',')) {
+            const [lastName, firstName] = author.split(',').map(part => part.trim());
+            const initials = firstName.split(' ')
+                .map(name => name.charAt(0).toUpperCase())
+                .join(' ');
+            return `${lastName} ${initials}`;
+        }
+
+        // 处理已经包含点号的格式 (A. Einstein)
+        if (author.includes('.')) {
+            const parts = author.split(' ');
+            const lastName = parts[parts.length - 1];
+            const initials = parts.slice(0, -1)
+                .map(part => part.charAt(0).toUpperCase())
+                .join(' ');
+            return `${lastName} ${initials}`;
+        }
+
+        // 处理普通格式 (Albert Einstein 或 James Robert Smith)
+        const parts = author.split(' ');
+        const lastName = parts[parts.length - 1];
+        const initials = parts.slice(0, -1)
+            .map(name => name.charAt(0).toUpperCase())
+            .join(' ');
+        return `${lastName} ${initials}`;
+    }
+
+    // 处理多个作者的函数
     function formatAuthors(authors) {
-        return authors
-            .split(';')
-            .map((author, index, array) => {
-                author = author.trim();
-                
-                // 处理英文作者名
-                if (/[a-zA-Z]/.test(author)) {
-                    const parts = author.split(' ').filter(part => part); // 移除空字符串
-                    if (parts.length > 1) {
-                        // 获取姓氏（最后一个部分）
-                        const lastName = parts.pop();
-                        
-                        // 处理名字缩写（其余部分）
-                        const initials = parts.map(part => part[0].toUpperCase()).join(' ');
-                        
-                        // 如果是第四个及以后的作者，且不是最后一个，则用"et al"替代
-                        if (index >= 3 && index < array.length - 1) {
-                            return 'et al';
-                        }
-                        
-                        // 返回格式化后的作者名: "Yu H B"
-                        return `${lastName} ${initials}`;
-                    }
-                }
-                return author;
-            })
-            .filter((author, index, array) => {
-                // 如果已经有"et al"，则移除后续作者
-                if (array.includes('et al')) {
-                    return index <= array.indexOf('et al');
-                }
-                return true;
-            })
+        // 按逗号分隔作者
+        return authors.split(',')
+            .map(author => formatAuthorName(author.trim()))
             .join(', ');
     }
-
-    function copyToClipboard() {
-        const text = resultDiv.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('已复制到剪贴板！');
-        }).catch(err => {
-            console.error('复制失败：', err);
-        });
-    }
-
-    const typeItems = document.querySelectorAll('.type-selector li');
-
-    typeItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // 移除其他项的active类
-            typeItems.forEach(i => i.classList.remove('active'));
-            // 添加当前项的active类
-            this.classList.add('active');
-            
-            // 更新select的值并触发change事件
-            const type = this.dataset.type;
-            const select = document.getElementById('referenceType');
-            select.value = type;
-            select.dispatchEvent(new Event('change'));
-        });
-    });
 }); 

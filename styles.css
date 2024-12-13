@@ -11,11 +11,13 @@ body {
     min-height: 100vh;
     padding: 20px;
     color: #1d1d1f;
+    position: relative;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
+    padding-bottom: 60px;
 }
 
 header {
@@ -243,4 +245,106 @@ button {
 .reference-fields {
     opacity: 1;
     transform: translateY(0);
-} 
+}
+
+/* Logo 样式 */
+.logo-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logo-text-wrapper {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.logo-text {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #007AFF, #5856D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 弹窗样式 */
+.popup {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 28px 28px 24px;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 320px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+}
+
+.logo-container:hover .popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.qr-code {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.popup-text {
+    color: #1d1d1f;
+    font-size: 15px;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    text-align: center;
+    line-height: 1.47059;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    margin-top: 18px;
+    padding: 0 12px;
+    opacity: 0.92;
+}
+
+.popup-text.chinese {
+    font-family: "PingFang SC", "SF Pro SC", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    margin-top: 8px;
+    color: #86868b;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+/* 添加箭头指示 */
+.popup::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
